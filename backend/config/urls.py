@@ -25,6 +25,7 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
+   path('crawl/', include('apps.crawlers.urls')),
    path('file/', include('apps.file_worker.urls')),
    path('chat/', include('apps.chat.urls')),
    path('map/', include('apps.map.urls')),

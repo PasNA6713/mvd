@@ -14,7 +14,7 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1']
+ALLOWED_HOSTS = ['127.0.0.1', '18.191.16.194', 'mozh-team.net.ru']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'apps.map',
     'apps.clasterization',
     'apps.file_worker',
+    'apps.crawlers',
 ]
 
 WSGI_APPLICATION = 'config.wsgi.application'

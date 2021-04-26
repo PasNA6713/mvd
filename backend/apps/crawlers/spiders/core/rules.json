@@ -1,0 +1,48 @@
+{
+    "meduza": {
+        "url": "https://meduza.io/",
+        "post_css": {
+            "type": "css",
+            "path": "a.Link-isInBlockTitle"
+        },
+        "pagination_css": {
+            "type": "css",
+            "path": "a.toggle-menu__item-link_pagination"
+        },
+        "post_title": {
+            "type": "xpath",
+            "path": "//h1[@data-testid='rich-title' or @data-testid='simple-title']/text()"
+        },
+        "post_text": {
+            "type": "xpath",
+            "path": "//div[@class='GeneralMaterial-body' or @class='SlidesMaterial-bg']"
+        },
+        "post_date": {
+            "type": "xpath",
+            "path": "//time[@data-testid='timestamp']/text()"
+        }
+    },
+    "pikabu": {
+        "url": "https://pikabu.ru/",
+        "post_css": {
+            "type": "xpath",
+            "path": "//a[contains(@class, 'story__title-link')]"
+        },
+        "pagination_css": {
+            "type": "css",
+            "path": "a.toggle-menu__item-link_pagination"
+        },
+        "post_title": {
+            "type": "xpath",
+            "path": "//span[@class='story__title-link']/text()"
+        },
+        "post_text": {
+            "type": "xpath",
+            "path": "//div[@class='story__content-inner']"
+        },
+        "post_date": {
+            "type": "xpath",
+            "path": "//time/@datetime"
+        }
+    }
+}
