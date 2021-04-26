@@ -32,6 +32,9 @@ class StartCrawlerView(APIView):
                     allowed_domains=[extract_domain(urls[0])]
                 )
                 
+            elif name == 'instagram':
+                pass
+
             else:
                 process.crawl(name)
                 
