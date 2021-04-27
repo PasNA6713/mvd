@@ -13,7 +13,8 @@
     <script>
         const chatSocket = new WebSocket(
             'ws://'
-            + window.location.host
+            + '127.0.0.1:8000'
+            // + 'mozh-team.net.ru'
             + '/ws/'
             + '1234/'
         )
@@ -34,7 +35,8 @@
         };
 
         document.querySelector('#chat-message-test').onclick = function(e) {
-            fetch('http://'+window.location.host+'/chat/send/', {
+            // fetch('https://'+'mozh-team.net.ru'+'/chat/send/', {
+            fetch('http://'+'127.0.0.1:8000'+'/chat/send/', {
                 method: 'POST',
                 headers: {
                     'Authorization': 'Token 1234'

@@ -1,20 +1,22 @@
 import json
 
 from channels.generic.websocket import AsyncWebsocketConsumer
+from channels.db import database_sync_to_async
 
+from .models import SessionModel
 
-CURRENT_CHATS = dict()
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         token = self.scope['url_route']['kwargs']['token']
-        CURRENT_CHATS[token] = self.channel_name
+        session, is_created = await database_sync_to_async(SessionModel.objects.get_or_create)(token=token)
+        session.session = self.channel_name
+        await database_sync_to_async(session.save)()
         await self.accept()
 
     async def disconnect(self, close_code):
-        for i, j in CURRENT_CHATS.items():
-            if j == self.channel_name:
-                CURRENT_CHATS.pop(i)
+        session = await database_sync_to_async(SessionModel.objects.get)(session=self.channel_name)
+        await database_sync_to_async(session.delete)()
         await self.close()
 
     # отправка
