@@ -1,4 +1,5 @@
-from asgiref.sync import async_to_sync
+from asgiref.sync import async_to_sync, sync_to_async
+from channels.db import database_sync_to_async
 
 from channels.layers import get_channel_layer
 
@@ -29,6 +30,6 @@ async def a_send(channel_name, message: str) -> None:
 
 
 async def a_send_all(message: str) -> None:
-    for user in SessionModel.objects.all():
-        a_send(user.session, message)
+    for user in await sync_to_async(list)(SessionModel.objects.all()):
+        await a_send(user.session, message)
 
