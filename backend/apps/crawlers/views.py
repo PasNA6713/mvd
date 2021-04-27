@@ -1,3 +1,4 @@
+import asyncio
 from multiprocessing import Process
 
 from rest_framework import status
@@ -11,6 +12,8 @@ from scrapy.utils.project import get_project_settings
 from .serializers import RunnerSerializer, ConstructSpiderSerialiser
 from .spiders.core.ConstructorData import Scrapers
 from .spiders.core.services import extract_domain
+from .spiders.core.instagram_parser import insta_broadcast
+
 
 
 process = CrawlerProcess(get_project_settings())
@@ -33,7 +36,9 @@ class StartCrawlerView(APIView):
                 )
                 
             elif name == 'instagram':
-                pass
+                p = Process(target=parse())
+                p.start()
+                return Response(status=status.HTTP_200_OK)
 
             else:
                 process.crawl(name)
@@ -43,17 +48,7 @@ class StartCrawlerView(APIView):
         except ReactorAlreadyRunning: pass
         return Response(status=status.HTTP_200_OK)
 
-
-class ConstructSpiderView(APIView):
-    serializer_class = ConstructSpiderSerialiser
-
-    def post(self, request):
-        try:
-            params = {i: j for i, j in request.data.items()}
-            params.pop('csrfmiddlewaretoken')
-            Scrapers.construct(**params)
-            Scrapers.save()
-        except Exception as e:
-            logger.error(e)
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-        return Response(status=status.HTTP_200_OK)
+def parse():
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    loop.run_until_complete(insta_broadcast(100, 'навальный'))
