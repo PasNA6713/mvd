@@ -8,40 +8,40 @@
 </head>
 
 <body>
-    <textarea id="chat-log" cols="100" rows="20"></textarea><br>
-    <input id="chat-message-input" type="text" size="100"><br>
-    <input id="chat-message-submit" type="button" value="Send">
+    <input id="chat-message-test" type="button" value="Test">
 
     <script>
         const chatSocket = new WebSocket(
             'ws://'
-            + window.location.host
+            + '127.0.0.1:8000'
+            // + 'mozh-team.net.ru'
             + '/ws/'
             + '1234/'
         )
 
+        var counter = 0
         chatSocket.onmessage = function(e) {
-            console.log(e)
+            counter += 1
+            if (counter % 10 === 0) {
+                chatSocket.send(JSON.stringify({
+                    'message': 'alive'
+                }))
+                counter = 0
+            }
         };
 
         chatSocket.onclose = function(e) {
             console.error('Chat socket closed unexpectedly');
         };
 
-        document.querySelector('#chat-message-input').focus();
-        document.querySelector('#chat-message-input').onkeyup = function(e) {
-            if (e.keyCode === 13) {  // enter, return
-                document.querySelector('#chat-message-submit').click();
-            }
-        };
-
-        document.querySelector('#chat-message-submit').onclick = function(e) {
-            const messageInputDom = document.querySelector('#chat-message-input');
-            const message = messageInputDom.value;
-            chatSocket.send(JSON.stringify({
-                'message': message
-            }));
-            messageInputDom.value = '';
+        document.querySelector('#chat-message-test').onclick = function(e) {
+            // fetch('https://'+'mozh-team.net.ru'+'/chat/send/', {
+            fetch('http://'+'127.0.0.1:8000'+'/chat/send/', {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Token 1234'
+                }
+            });
         };
     </script>
 </body>

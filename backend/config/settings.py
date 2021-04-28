@@ -14,7 +14,7 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1']
+ALLOWED_HOSTS = ['127.0.0.1', '18.191.16.194', 'mozh-team.net.ru']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'apps.map',
     'apps.clasterization',
     'apps.file_worker',
+    'apps.crawlers',
 ]
 
 WSGI_APPLICATION = 'config.wsgi.application'
@@ -182,3 +183,10 @@ CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_HEADERS  =  list(default_headers)  +  [ 
     'Content-Disposition', 
 ]
+
+
+CELERY_BROKER_URL = 'redis://localhost:6379'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TASK_SERIALIZER = 'json'

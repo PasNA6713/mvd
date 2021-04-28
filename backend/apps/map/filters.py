@@ -12,6 +12,15 @@ def get_items_by_ids(ids: list):
         q |= Q(pk=i)
     return MapItem.objects.filter(q)
 
+def get_months_plot(queryset, field) -> list:
+    return queryset.annotate(date=Cast('datetime', output_field=DateField()))\
+        .values('date').annotate(month=TruncMonth('date'))\
+        .values('month').annotate(c=Count(field)).values('month', 'c')\
+        .order_by('month')
+
+def get_column_sum_plot(queryset, field) -> list:
+    return queryset.values(field).annotate(field=F(field), c=Count(field)).order_by('-c').values('field', 'c')
+
 def filter_range(base_point, second_point, min_range: float) -> bool:
     return sqrt((base_point['lat']-second_point['lat'])**2 + (base_point['long']-second_point['long'])**2) < min_range
 
@@ -30,15 +39,6 @@ def get_time_group(queryset, name, number):
         start_time = 16
         end_time = 21
     return queryset.filter(Q(datetime__hour__gte=start_time) & Q(datetime__hour__lt=end_time))
-
-def get_months_plot(queryset, field) -> list:
-    return queryset.annotate(date=Cast('datetime', output_field=DateField()))\
-        .values('date').annotate(month=TruncMonth('date'))\
-        .values('month').annotate(c=Count(field)).values('month', 'c')\
-        .order_by('month')
-
-def get_column_sum_plot(queryset, field) -> list:
-    return queryset.values(field).annotate(field=F(field), c=Count(field)).order_by('-c').values('field', 'c')
 
 
 class MapItemFilter(filters.FilterSet):
