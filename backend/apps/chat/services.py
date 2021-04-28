@@ -15,13 +15,13 @@ def send_to_user(channel_name: str, message: str) -> None:
         })
 
 def send_to_all(message: str) -> None:
-    channel_layer = get_channel_layer()
     for user in SessionModel.objects.all():
         send_to_user(user.session, message)
 
 
 async def a_send(channel_name, message: str) -> None:
     channel_layer = get_channel_layer()
+    print(f'channel: {message}')
     await channel_layer.send(
         channel_name, {
             'type': 'chat_message',

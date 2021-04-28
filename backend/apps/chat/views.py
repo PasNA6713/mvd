@@ -4,6 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from .models import SessionModel
 from .services import send_to_user, send_to_all
+from .tasks import celery_send_all
 
 
 def room(request):
@@ -17,5 +18,5 @@ def send(request):
     if channel_name is None: return HttpResponse(status=204)
 
     for i in range(100):
-        send_to_all(i)
+        celery_send_all.delay(i)
     return HttpResponse(status=200)

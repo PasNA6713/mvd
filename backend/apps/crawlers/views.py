@@ -1,4 +1,3 @@
-import asyncio
 from multiprocessing import Process
 
 from rest_framework import status
@@ -9,10 +8,9 @@ from twisted.internet.error import ReactorAlreadyRunning
 from scrapy.crawler import CrawlerProcess
 from scrapy.utils.project import get_project_settings
 
-from .serializers import RunnerSerializer, ConstructSpiderSerialiser
-from .spiders.core.ConstructorData import Scrapers
+from .serializers import RunnerSerializer
 from .spiders.core.services import extract_domain
-from .spiders.core.instagram_parser import insta_broadcast
+from .tasks import insta_parser
 
 
 
@@ -36,8 +34,7 @@ class StartCrawlerView(APIView):
                 )
                 
             elif name == 'instagram':
-                p = Process(target=parse())
-                p.start()
+                insta_parser.delay(100, 'навальный')
                 return Response(status=status.HTTP_200_OK)
 
             else:
@@ -47,8 +44,3 @@ class StartCrawlerView(APIView):
             p.start()
         except ReactorAlreadyRunning: pass
         return Response(status=status.HTTP_200_OK)
-
-def parse():
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
-    loop.run_until_complete(insta_broadcast(100, 'навальный'))

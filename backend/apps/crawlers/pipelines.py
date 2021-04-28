@@ -8,6 +8,7 @@ from loguru import logger
 from django.conf import settings
 from .spiders.core.services import extract_domain, to_datetime
 from apps.chat.services import a_send_all
+from apps.chat.tasks import celery_send_all
 
 
 class PreprocessPipeline():
@@ -60,8 +61,8 @@ class PostgresPipeline():
         logger.success(f'{spider.name.upper()} finished!')
         logger.success(f'Scraped: {len(self.urls)} items.')
     
-    async def process_item(self, item, spider):
-        await a_send_all(item['title'])
+    def process_item(self, item, spider):
+        celery_send_all.delay(item['title'])
         # source = extract_domain(item['link'])
         # h = PostModel.objects.get_or_create(
         #     link=item['link'], title=item['title'],

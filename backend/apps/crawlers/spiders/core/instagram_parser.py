@@ -104,8 +104,3 @@ def insta_parse(tag: str):
     session = requests.session()
     for post in get_posts_list(tag, session):
         yield post.get('text')
-
-
-async def insta_broadcast(number, tag):
-    for i, message in zip(range(number), insta_parse(tag)):
-        await a_send_all(message)
