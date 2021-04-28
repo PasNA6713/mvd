@@ -11,6 +11,7 @@ from scrapy.utils.project import get_project_settings
 from .serializers import RunnerSerializer
 from .spiders.core.services import extract_domain
 from .tasks import insta_parser
+from .spiders.core.instagram_parser import insta_parse
 
 
 
@@ -34,7 +35,9 @@ class StartCrawlerView(APIView):
                 )
                 
             elif name == 'instagram':
-                insta_parser.delay(100, 'навальный')
+                # insta_parser.delay(100, 'навальный')
+                for i, message in zip(range(10), insta_parse('митинги')):
+                    pass
                 return Response(status=status.HTTP_200_OK)
 
             else:
