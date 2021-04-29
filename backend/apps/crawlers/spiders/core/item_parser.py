@@ -24,10 +24,8 @@ def _check_parsing_type(response, dictionary, item):
 
 def _get_token(response, dictionary, item):
     a = _check_parsing_type(response, dictionary, item)
-    if a:
-        return a.get()
+    if a: return a.get()
 
 def _get_all_tokens(response, dictionary, item):
     a = _check_parsing_type(response, dictionary, item)
-    if a:
-        return a.getall()
+    if a: return a.getall()

@@ -17,7 +17,7 @@ def _month_to_int(month: str):
     if month=='октября': return 10
     if month=='ноября': return 11
     if month=='декабря': return 12
-    
+
 def to_datetime(date: str, hour=0, minute=0) -> datetime:
     if '/' in date:
         date = date.split('/')

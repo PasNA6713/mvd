@@ -7,13 +7,11 @@ from loguru import logger
 
 from django.conf import settings
 from .spiders.core.services import extract_domain, to_datetime
-from apps.chat.services import a_send_all
 from apps.chat.tasks import celery_send_all
 
 
 class PreprocessPipeline():
-    def __init__(self):
-        self.urls = set()
+    def __init__(self): self.urls = set()
 
     def open_spider(self, spider): pass
 
