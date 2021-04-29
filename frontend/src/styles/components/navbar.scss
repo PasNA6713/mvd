@@ -1,0 +1,34 @@
+.navbar {
+  margin: 0 auto;
+  height: 551px;
+  background-size: 100%;
+}
+
+.navbar__row {
+  justify-content: space-around;
+  padding-top: 30px;
+}
+
+.navbar__row__btn {
+  text-decoration: none;
+  padding: 10px;
+  color: white; 
+}
+.navbar__row__btn:hover {
+  color: #EDAC48
+}
+
+.navbar__text, .navbar__text-author {
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: normal;
+  color: white;
+  opacity: 50%;
+  text-align: center;
+  width: 1700px;
+  margin: auto;
+}
+
+.navbar__text {
+  padding-top: 70px;
+}

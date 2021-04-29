@@ -1,0 +1,53 @@
+.header {
+  width: 1500px; 
+  margin-bottom: 100px
+}
+
+.header__img-gerb {
+  height: 62px;
+  width: 62px;
+  float: left; 
+  margin-right: 20px;
+}
+
+.header__h2-title, .header__h3-title {
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: normal;
+}
+
+.header__h2-title {
+  color: #7B7B7B;
+}
+
+.header__h3-title {
+  float: left; 
+  margin-right: 20px; 
+  color: #C9C9C9; 
+}
+
+.header__top-buttons {
+  float: right;
+  display: inline;
+}
+
+.header__top-buttons__version {
+  height: 84px;
+  width: 41px;
+  padding: 10px; 
+  border-radius: 5px; 
+  background: #EDAC48;
+  color: white; 
+  text-decoration: none;
+}
+
+.header__top-buttons__lang {
+  height: 84px;
+  width: 41px;
+  padding: 10px; 
+  border-radius: 5px; 
+  margin-right: 10px; 
+  text-decoration: none;
+  color: white; 
+  background: #EDAC48;
+}
