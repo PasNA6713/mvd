@@ -9,6 +9,8 @@
 7. Необходимо произвести инициализирующие миграции в БД `python manage.py makemigretions` and `python manage.py migrate`
 8. `python manage.py runserver` - произведет запуск asgi сервера daphne, доступного по `http://127.0.0.1:8000/`
 9. `http://127.0.0.1:8000/swagger/` - документация проекта
+
+P.S. В отсутствии пакетов nltk, необходимо произвести их установку
  
 # Setup frontend
 1. Необходимы NodeJS 12+, npm 6+, VueJS 2
