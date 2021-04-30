@@ -1,4 +1,6 @@
 aioredis==1.3.1
+nltk
+natasha
 redis
 celery
 asgiref==3.3.0
@@ -72,7 +74,8 @@ requests==2.24.0
 requests-oauthlib==1.3.0
 ruamel.yaml==0.16.12
 ruamel.yaml.clib==0.2.2
-scikit-learn
+Cython
+scikit-learn==0.21.3
 scipy
 Scrapy==2.5.0
 service-identity==18.1.0

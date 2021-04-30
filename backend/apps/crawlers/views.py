@@ -1,6 +1,6 @@
 from multiprocessing import Process
 
-from rest_framework import status
+from rest_framework import status, generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -8,8 +8,9 @@ from twisted.internet.error import ReactorAlreadyRunning
 from scrapy.crawler import CrawlerProcess
 from scrapy.utils.project import get_project_settings
 
-from .serializers import RunnerSerializer
+from .serializers import RunnerSerializer, NewsSerializer
 from .spiders.core.services import extract_domain
+from .models import NewsModel
 from .tasks import insta_parser
 
 
@@ -44,3 +45,8 @@ class StartCrawlerView(APIView):
             p.start()
         except ReactorAlreadyRunning: pass
         return Response(status=status.HTTP_200_OK)
+
+
+class NewsList(generics.ListAPIView):
+    queryset = NewsModel.objects.all()
+    serializer_class = NewsSerializer

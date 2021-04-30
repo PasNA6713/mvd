@@ -1,15 +1,16 @@
-This is the Django Rest Framework template with loguru (logging & debug), dotenv (loading env vars from file), djoser & jwt auth, django-filters, swagger auto docs, cors headers politics
-# Setup
-1. install with `pip install loguru python-dotenv psycopg2 django djangorestframework djoser djangorestframework_simplejwt django-filter drf-yasg django-cors-headers==3.5.0` or use `pip install -r requirements.txt`
-2. Create from backend/example.env => backend/.env with yours settings 
-3. from backend/ run server `python manage.py migrate` and `python manage.py runserver`
+# Setup backend
+1. Необходим рабочий Postgres (localhost:5432)
+2. Для работы вебсокетов и парсинга необходимы Redis (localhost:6379), Celery (работает только под Linux)
+3. Данные для подключения Postgres необходимо указать в файле .env (см example.env)
+4. Необходимо создать окружение для работы проекта `python -m venv venv`. Рекомендуемы версия языка 3.7+
+   Активация окружения `source <env_name>/bin/activate` - Linux, `cd <env_name>/Scripts` - `activate.bat` - Windows
+5. Затем необходимо произвести установку необходимых библиотек в окружение `pip install -r requirements.txt`
+6. `celery -A config worker -l info` - активация воркера Celery, должен работать параллельно с приложением
+7. Необходимо произвести инициализирующие миграции в БД `python manage.py makemigretions` and `python manage.py migrate`
+8. `python manage.py runserver` - произведет запуск asgi сервера daphne, доступного по `http://127.0.0.1:8000/`
+9. `http://127.0.0.1:8000/swagger/` - документация проекта
  
- # Auth methods
-1. Use `post` - `/auth/token/login/` - `{username: '', password: ''}` for log in and getting your auth token
-2. Use `post` - `/auth/token/logout/` for out and deactivate token
-3. Use `post` - `/auth/users/` - `{username: '', password: '', email: ''}` for create new user and send code on his email
-4. Use `post` - `/auth/users/activation/` - `{uid: '', token: ''}` for activate new user (link from his email)
-
-### JWT Auth
-1. Use `post` - `/api/token/` - `{username: '', password: ''}` for log in and getting your auth tokens (pair)
-2. Use `post` - `/api/token/refresh/` - `{refresh: 'your refresh token'}` to refresh access token
+# Setup frontend
+1. Необходимы NodeJS 12+, npm 6+, VueJS 2
+2. Произвести `npm install` в директории frontend для установки необходимых пакетов
+3. `npm run serve` - запуск проекта

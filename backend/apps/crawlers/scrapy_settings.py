@@ -15,5 +15,6 @@ USER_AGENT = 'Mozilla/5.0 (X11; Linux x86_64; rv:48.0) Gecko/20100101 Firefox/48
 
 ITEM_PIPELINES = {
    'apps.crawlers.pipelines.PreprocessPipeline': 100,
+   'apps.crawlers.pipelines.ClassificationPipeline': 150,
    'apps.crawlers.pipelines.PostgresPipeline': 200
 }

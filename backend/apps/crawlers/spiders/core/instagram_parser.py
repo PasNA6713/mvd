@@ -1,12 +1,22 @@
 from datetime import datetime
 import json
+import joblib
 import os
 from time import sleep
 
 import requests.utils
 
-from apps.chat.services import a_send_all
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.neighbors import KNeighborsClassifier
 
+from apps.chat.services import a_send_all
+from apps.crawlers.mlearn.preproccesor import ner, preproccesor
+from apps.crawlers.models import NewsModel
+from django.conf import settings
+
+
+knn_social = joblib.load(os.path.join(settings.BASE_DIR,'apps/crawlers/mlearn/social.pkl'))
+tf_social = joblib.load(os.path.join(settings.BASE_DIR,'apps/crawlers/mlearn/social_tf.pkl'))
 
 HEADERS = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
@@ -69,7 +79,6 @@ def extract_post_data(posts_list):
 
 
 def get_posts_list(tag, session):
-    tag = "навальный"
     search_url = f"https://www.instagram.com/explore/tags/{tag}/?__a=1"
 
     response = session.get(url=search_url, headers=HEADERS)
@@ -103,4 +112,12 @@ def get_posts_list(tag, session):
 def insta_parse(tag: str):
     session = requests.session()
     for post in get_posts_list(tag, session):
-        yield post.get('text')
+        text = post.get('text')
+        if knn_social.predict(tf_social.transform([preproccesor(text)]))==0:
+            loc, org, per = ner(text)
+            m, isCreated = NewsModel.objects.get_or_create(
+                    link='instagram', title=text[:100]+'...',
+                    text=text, loc=loc,
+                    org=org, per=per
+                )
+            yield str(m)

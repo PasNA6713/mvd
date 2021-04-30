@@ -1,27 +1,45 @@
-import copy
+import os
+import joblib
 from datetime import datetime, timedelta
 
+from asgiref.sync import sync_to_async
 from bs4 import BeautifulSoup as BS
 from scrapy.exceptions import DropItem
-from loguru import logger
+
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.feature_extraction.text import TfidfVectorizer
 
 from django.conf import settings
-from .spiders.core.services import extract_domain, to_datetime
 from apps.chat.tasks import celery_send_all
+
+from .spiders.core.services import extract_domain, to_datetime
+from .models import NewsModel
+from .mlearn.preproccesor import preproccesor, ner
+
+from loguru import logger
+
+rf_news = joblib.load(os.path.join(settings.BASE_DIR,'apps/crawlers/mlearn/news_bin_class.pkl'))
+tf_news = joblib.load(os.path.join(settings.BASE_DIR,'apps/crawlers/mlearn/news_tf.pkl'))
 
 
 class PreprocessPipeline():
     def __init__(self): self.urls = set()
 
-    def open_spider(self, spider): pass
+    def open_spider(self, spider): 
+        logger.success(f'Run spider: {spider.name.upper()}')
 
-    def close_spider(self, spider): pass
+    def close_spider(self, spider): 
+        logger.success(f'{spider.name.upper()} finished!')
+        logger.success(f'Scraped: {len(self.urls)} items.')
 
     def process_item(self, item, spider):
         if item['link'] in self.urls:
             raise DropItem(f"Duplicate item found: {item!r}")
         else:
             self.urls.add(item['link'])
+
+        if item.get('text') is None or item.get('link') is None:
+            raise DropItem(f"Empty item!")
         
         item['text'] = BS(item.get('text'), features="lxml").text
 
@@ -51,34 +69,27 @@ class PreprocessPipeline():
         return item
 
 
-class PostgresPipeline():
-    def open_spider(self, spider):
-        logger.success(f'Run spider: {spider.name.upper()}')
+class ClassificationPipeline():
+    def open_spider(self, spider): pass
 
-    def close_spider(self, spider):
-        logger.success(f'{spider.name.upper()} finished!')
-        logger.success(f'Scraped: {len(self.urls)} items.')
-    
+    def close_spider(self, spider): pass
+
     def process_item(self, item, spider):
+        if rf_news.predict(tf_news.transform([preproccesor(item['text'])]))==0:
+            suhnosti = ner(item['text'])
+            item['loc'] = suhnosti[0]
+            item['org'] = suhnosti[1]
+            item['per'] = suhnosti[2]
+            return item
+        else: raise DropItem(f"Not interested news")
+
+
+class PostgresPipeline():
+    def open_spider(self, spider): pass
+
+    def close_spider(self, spider): pass
+    
+    async def process_item(self, item, spider):
+        await sync_to_async(NewsModel.objects.get_or_create)(**item)
         celery_send_all.delay(item['title'])
-        # source = extract_domain(item['link'])
-        # h = PostModel.objects.get_or_create(
-        #     link=item['link'], title=item['title'],
-        #     posted=item['posted'], text=item['text'],
-        #     source=source
-        # )
-        # model, isCreated = copy.deepcopy(h[0]), h[1]
-        # if isCreated:
-        #     model.tags = item.get('tags')
-        #     logger.info(f'Created - {model}')
-        # else:
-        #     if len(model.datetime) >= settings.PARSER_COUNTER:
-        #         return item
-        #     logger.info(f'Updated - {model}')
-        # model.likes.append(item.get('likes'))
-        # model.bookmarks.append(item.get('bookmarks'))
-        # model.views.append(item.get('views'))
-        # model.datetime.append(item.get('datetime'))
-        # model.comments.append(item.get('comments'))
-        # model.save()
         return item

@@ -6,3 +6,6 @@ class PostItem(Item):
     link = Field()
     posted = Field()
     text = Field()
+    org = Field()
+    loc = Field()
+    per = Field()
