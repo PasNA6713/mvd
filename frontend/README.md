@@ -1,4 +1,4 @@
-# police
+# Frontend
 
 ## Project setup
 ```
