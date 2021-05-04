@@ -1,0 +1,60 @@
+version: "3.7"
+
+services:
+    postgres:
+        restart: always
+        image: postgres:12
+        volumes: 
+            - pgdata:/var/lib/postgresql/data
+        environment:
+            - POSTGRES_DB=postgres
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=postgres
+        
+    redis:
+        restart: always
+        image: redis:5
+
+    migration:
+        build: ./backend
+        volumes:
+            - ./backend:/usr/src/project
+        links:
+            - postgres:postgres
+            - redis:redis
+        depends_on:
+            - postgres
+        command: >
+            sh -c "python /usr/src/project/manage.py makemigrations &&
+                   python /usr/src/project/manage.py migrate --noinput"
+
+    celery:
+        restart: always
+        build: ./backend
+        volumes:
+            - ./backend:/usr/src/project
+        depends_on:
+            - postgres
+            - redis
+            - migration
+        command: celery -A config worker -l info
+
+    backend:
+        restart: always
+        build: ./backend
+        volumes:
+            - ./backend:/usr/src/project
+        ports:
+            - "8000:8000"
+        links:
+            - postgres:postgres
+            - redis:redis
+        depends_on:
+            - migration
+            - celery
+            - postgres
+            - redis
+        command: python /usr/src/project/manage.py runserver 0.0.0.0:8000
+
+volumes:
+    pgdata:
