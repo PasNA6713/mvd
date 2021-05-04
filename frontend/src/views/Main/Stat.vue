@@ -1,6 +1,6 @@
 <template>
   <div>
-     <MapFilter class="map-filter" v-bind:theme="{'color': '#544F88'}" v-on:get-data="getData"/>
+    <MapFilter class="map-filter" v-bind:theme="{'color': '#544F88'}" v-on:get-data="getData"/>
   </div>
 </template>
 

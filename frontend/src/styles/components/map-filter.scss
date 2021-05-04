@@ -11,10 +11,15 @@
 }
 
 .filter-buttons {
-  justify-content: space-evenly;
+  display: flex;
+  flex-flow: wrap-reverse;
+  align-content: space-evenly;
+  height: 108px;
+  margin-top: 5px;
 }
 
 .filter-buttons__button {
   padding: 10px; 
-  width: 49%;
+  width: 100%;
+  display: block;
 }

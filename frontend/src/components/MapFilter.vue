@@ -1,6 +1,5 @@
 <template>
-  <v-card
-  elevation="8">
+  <v-card elevation="8">
     <v-row>
       <v-col cols="6">
         <v-card class="map-filter"
@@ -19,6 +18,12 @@
             :items="filterData.light"
             v-model="chosedData.light"
             label="Освещение"
+          ></v-autocomplete>
+          <v-autocomplete class="map-filter__light"
+            no-data-text="Введите целое число"
+            :items="filterData.clusterQuontity"
+            v-model="chosedData.clusterQuontity"
+            label="Количество кластеров"
           ></v-autocomplete>
         </v-card>
       </v-col>
@@ -46,13 +51,12 @@
         tick-size="3"
         v-model="chosedData.timeGroup">
         </v-slider>
+        <div class="filter-buttons">
+          <v-btn class="filter-buttons__button" color="#EDAC48" @click="clearForm">Очистить фильтр</v-btn>
+          <v-btn class="filter-buttons__button" color="#EDAC48" @click="getData">Показать на карте</v-btn>
+        </div>
       </v-col>
       <div class="common-spacer"></div>
-    </v-row>
-
-    <v-row class="filter-buttons">
-      <v-btn class="filter-buttons__button" color="#EDAC48" @click="clearForm">Очистить фильтр</v-btn>
-      <v-btn class="filter-buttons__button" color="#EDAC48" @click="getData">Показать на карте</v-btn>
     </v-row>
   </v-card>
 </template>
@@ -79,6 +83,7 @@ export default {
           "2.00 - 11.00", "11.00 - 16.00", 
           "16.00 - 21.00", "21.00 - 2.00"
         ],
+        clusterQuontity: []
       },
 
       chosedData: {
@@ -86,7 +91,8 @@ export default {
         timeGroup: 0,
         region: "",
         light: "",
-        category: ""
+        category: "",
+        clusterQuontity: 1
       }
     }
   },
@@ -99,7 +105,8 @@ export default {
         category: this.chosedData.category,
         datetime_before: (this.chosedData.date[1]) ? `${this.chosedData.date[1]}T00:00:00Z` : "", 
         datetime_after: (this.chosedData.date[0]) ? `${this.chosedData.date[0]}T00:00:00Z` : "",
-        time_group: this.chosedData.timeGroup
+        time_group: this.chosedData.timeGroup,
+        cluster_quontity: this.chosedData.clusterQuontity
       }
       return filterData
     }
@@ -113,6 +120,9 @@ export default {
         this.filterData.category = response.data.category
         this.filterData.light = response.data.light
       })
+      for(let i=1; i<=10;i++){
+        this.filterData.clusterQuontity.push(i)
+      }
     },
 
     getData() {

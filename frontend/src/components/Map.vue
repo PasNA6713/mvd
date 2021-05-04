@@ -1,5 +1,7 @@
 <template>
-  <div>
+  <v-card class="map-card"
+  style="border-radius: 15px; height: 904px"
+  elevation="8">
     <yandex-map id="map"
       :settings="settings"
       :coords="mapCenter"
@@ -9,7 +11,7 @@
       @map-was-initialized="getMapInstance"
     >
     </yandex-map>
-  </div>
+  </v-card>
 </template>
 
 <style lang="scss" scoped>
