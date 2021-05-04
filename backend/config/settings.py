@@ -5,8 +5,12 @@ from datetime import timedelta
 from dotenv import load_dotenv
 from corsheaders.defaults import default_headers
 
+if os.getenv("DOCKER") is None:
+    load_dotenv(".env")
+import nltk
+nltk.download('punkt')
+nltk.download('stopwords')
 
-load_dotenv(".env")
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -14,7 +18,7 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', '18.191.16.194', 'mozh-team.net.ru']
+ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -45,7 +49,7 @@ CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            "hosts": [('127.0.0.1', 6379)],
+            "hosts": [(str(os.getenv("REDIS_HOST")), 6379)],
         },
     },
 }
@@ -122,10 +126,10 @@ ROOT_URLCONF = 'config.urls'
 DATABASES = {
     'default':
         { 'ENGINE': 'django.db.backends.postgresql_psycopg2',
-          'NAME': os.getenv("DB_NAME"),
-          'USER': os.getenv("DB_USER"),
-          'PASSWORD': os.getenv("DB_PASSWORD"),
-          'HOST': os.getenv("DB_HOST"),
+          'NAME': str(os.getenv("DB_NAME")),
+          'USER': str(os.getenv("DB_USER")),
+          'PASSWORD': str(os.getenv("DB_PASSWORD")),
+          'HOST': str(os.getenv("DB_HOST")),
           'PORT': os.getenv("DB_PORT")
         }
 }
@@ -185,8 +189,8 @@ CORS_ALLOW_HEADERS  =  list(default_headers)  +  [
 ]
 
 
-CELERY_BROKER_URL = 'redis://localhost:6379'
-CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+CELERY_BROKER_URL = f"redis://{os.getenv('REDIS_HOST')}:6379"
+CELERY_RESULT_BACKEND = f"redis://{os.getenv('REDIS_HOST')}:6379"
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_SERIALIZER = 'json'

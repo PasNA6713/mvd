@@ -1,3 +1,5 @@
+from math import sqrt
+
 from django_filters import rest_framework as filters
 
 from django.db.models.functions import TruncMonth, Cast
