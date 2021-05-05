@@ -14,6 +14,7 @@ from .filters import (
     get_items_by_ids, filter_range
 )
 from . import params
+from .services import *
 
 
 class MapItemCreateView(generics.CreateAPIView):
