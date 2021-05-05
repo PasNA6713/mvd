@@ -82,12 +82,8 @@ class GetSomeMapItems(generics.CreateAPIView):
 
 
 class GetFilterParams(APIView):
-    def get(self, request, format=None):
-        return Response({
-            'light': params.LIGHT,
-            'region': params.REGION,
-            'category': params.CATEGORY
-        })
+    def get(self, request, fieldname):
+        return Response(params.FIELDS_SET.get(fieldname))
 
 
 class GetRangeMapItems(generics.ListCreateAPIView):

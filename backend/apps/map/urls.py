@@ -15,5 +15,5 @@ urlpatterns = [
     path('plot-diagram/<str:column>/', views.DiagramPlotView.as_view()),
     path('plot-bar/', views.BarPlotView.as_view()),
     
-    path('get-filter-params/', views.GetFilterParams.as_view()),
+    path('get-filter-params/<str:fieldname>/', views.GetFilterParams.as_view()),
 ]

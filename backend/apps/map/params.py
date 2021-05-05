@@ -1,21 +1,8 @@
 from .models import MapItem
 
+FIELDS_SET = {
+    i.name: set(MapItem.objects.all().values_list(i.name, flat=True).distinct())
+    for i in MapItem._meta.fields
+}
+FIELDS_SET['fields'] = {i.name for i in MapItem._meta.fields}
 
-LIGHT = []
-CATEGORY = []
-REGION = []
-
-try:
-    Items = MapItem.objects.all()
-    for item in Items:
-        LIGHT.append(item.light)
-        REGION.append(item.region)
-        CATEGORY.append(item.category)
-
-        LIGHT = list(set(LIGHT))
-        REGION = list(set(REGION))
-        CATEGORY = list(set(CATEGORY))
-except Exception:
-    pass
-
-    
