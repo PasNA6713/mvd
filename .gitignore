@@ -1,0 +1,8 @@
+*.pyc
+pycache
+*.egg-info
+*_env
+.env
+node_modules
+000*
+uploads

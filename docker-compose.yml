@@ -1,11 +1,11 @@
 version: "3.7"
 
 services:
-    postgres:
+    pg_db:
         restart: always
         image: postgres:12
-        volumes: 
-            - ./dumps/dump.sql:/docker-entrypoint-initdb.d/init.sql
+        volumes:
+            - ./dumps/dump.sql:/docker-entrypoint-initdb.d/1-data.sql
         environment:
             - POSTGRES_DB=postgres
             - POSTGRES_USER=postgres
@@ -22,20 +22,19 @@ services:
         ports:
             - "8000:8000"
         links:
-            - postgres:postgres
+            - pg_db:postgres
             - redis:redis
         depends_on:
-            - postgres
+            - pg_db
             - redis
         command: python /usr/src/project/manage.py runserver 0.0.0.0:8000
     
     celery:
-        restart: always
         build: ./backend
         volumes:
             - ./backend:/usr/src/project
         depends_on:
             - backend
-            - postgres
+            - pg_db
             - redis
         command: celery -A config worker -l info
