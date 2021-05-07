@@ -1,3 +1,13 @@
+*,
+*:after,
+*:before {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
 .theme1 {
   background-color: $theme1; 
 }
@@ -6,6 +16,9 @@
 }
 .theme3 {
   background-color: $theme3; 
+}
+.theme4 {
+  background-color: $theme4; 
 }
 
 .common-spacer {

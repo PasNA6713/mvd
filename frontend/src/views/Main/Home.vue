@@ -7,14 +7,13 @@
           <Map class="map" :filterParams="filterData" />
           <v-card class="chart-card"
           style="border-radius: 15px;"
-          elevation="8"
           v-if="loaded" >
             <Chart :chart-data="chartData" />
           </v-card>	
         </v-col>
         <v-col cols="6">
           <ClusterMap class="map" :filterParams="filterData" @get-table="getTable"/>
-          <DataTable :tableItems="clusterData" v-if="loaded" />
+          <DataTable :tableHeaders="tableHeaders" :tableItems="clusterData" v-if="loaded" />
         </v-col>
       </v-row>
     </v-container>
@@ -45,10 +44,19 @@ export default {
   },
   data() {
     return {
+      loaded: false,
+
       filterData: {},
       clusterData: [],
       chartData: {},
-      loaded: false,
+      
+      tableHeaders: [
+          { text: 'Время', filterable: true, align: 'start', value: 'datetime' },
+          { text: 'Регион', filterable: true, align: 'start', value: 'region' },
+          { text: 'Адрес', filterable: true, align: 'start', value: 'address' },
+          { text: 'Категория', filterable: true, align: 'start', value: 'category' },
+          { text: 'Освещение', filterable: true, align: 'start', value: 'light' },
+      ]
     }
   },
 

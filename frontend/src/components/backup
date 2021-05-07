@@ -1,24 +1,22 @@
 <template>
 <div>
-  <v-btn icon class="filter-icon"
+    <v-btn icon class="filter-icon"
     style="margin-left: 108px"
-    @click.stop="drawer = !drawer">
-    <v-icon>mdi-filter</v-icon>
-  </v-btn>
-
+     @click.stop="drawer = !drawer">
+      <v-icon>mdi-filter</v-icon>
+    </v-btn>
   <v-card class="map-filter-container">
     <v-navigation-drawer
     fixed
     absolute
     temporary
     v-model="drawer"
-    width="100%"
-    height="10vh"
+    width="40vw"
+    height="80vh"
     >
       <v-list
         dense
         nav
-        style="display: flex; align-items: baseline"
       >
         <v-list-item>
           <v-autocomplete class="map-filter__region"
@@ -26,16 +24,13 @@
             v-model="chosedData.region"
             label="Регион"
           ></v-autocomplete>
-        </v-list-item>
 
-        <v-list-item>
+        </v-list-item>
           <v-autocomplete class="map-filter__category"
             :items="filterData.category"
             v-model="chosedData.category"
             label="Категория"
-          ></v-autocomplete>
-        </v-list-item>
-
+            ></v-autocomplete>
         <v-list-item>
           <v-autocomplete class="map-filter__light"
             :items="filterData.light"
@@ -45,7 +40,7 @@
         </v-list-item>
 
         <v-list-item>
-          <v-autocomplete class="map-filter__cluster"
+          <v-autocomplete class="map-filter__light"
             no-data-text="Введите целое число"
             :items="filterData.clusterQuontity"
             v-model="chosedData.clusterQuontity"
@@ -58,7 +53,7 @@
             ref="menu"
             v-model="menu"
             :close-on-content-click="false"
-            :return-value.sync="chosedData.date"
+            :return-value.sync="date"
             transition="scale-transition"
             offset-y
             min-width="auto"
@@ -66,7 +61,7 @@
             <template v-slot:activator="{ on, attrs }">
               <v-text-field
                 v-model="chosedData.date"
-                label="Даты"
+                label="Picker in menu"
                 prepend-icon="mdi-calendar"
                 readonly
                 v-bind="attrs"
@@ -94,7 +89,7 @@
               <v-btn
                 text
                 color="primary"
-                @click="$refs.menu.save(chosedData.date)"
+                @click="$refs.menu.save(date)"
               >
                 OK
               </v-btn>
@@ -103,18 +98,21 @@
         </v-list-item>    
         
         <v-list-item>
-          <v-select class="map-filter__time"
-          v-model="chosedData.timeGroup"
-          :items="Object.keys(filterData.timeGroup[0])"
-          label="Время"
-          >
-          </v-select>
+          <v-slider
+          :tick-labels="filterData.sliderTicks"
+          :max="4"
+          :thumb-size="1000"
+          step="1"
+          ticks="always"
+          tick-size="3"
+          v-model="chosedData.timeGroup">
+          </v-slider>
         </v-list-item>
 
         <v-list-item>
           <div class="filter-buttons">
-            <v-btn color="#EDAC48" @click="clearForm"><v-icon>mdi-backspace-reverse</v-icon></v-btn>
-            <v-btn class="filter-buttons__button" color="#EDAC48" @click="getData"><v-icon>mdi-find-replace</v-icon>Показать на карте</v-btn>
+            <v-btn class="filter-buttons__button" color="#EDAC48" @click="clearForm">Очистить фильтр</v-btn>
+            <v-btn class="filter-buttons__button" color="#EDAC48" @click="getData">Показать на карте</v-btn>
           </div>
         </v-list-item>
       </v-list>
@@ -140,29 +138,28 @@ export default {
         region: [],
         light: [],
         category: [],
-        timeGroup: [
-          {
-            "Все время": 0,
-            "2.00 - 11.00": 1, 
-            "11.00 - 16.00": 2, 
-            "16.00 - 21.00": 3, 
-            "21.00 - 2.00": 4
-          }
+        sliderTicks: [
+          "Все время",
+          "2.00 - 11.00", "11.00 - 16.00", 
+          "16.00 - 21.00", "21.00 - 2.00"
         ],
         clusterQuontity: []
       },
 
       chosedData: {
-        date: ["", new Date().toISOString().substr(0, 10)],
-        timeGroup: "Все время",
+        date: ["", ""],
+        timeGroup: 0,
         region: "",
         light: "",
         category: "",
         clusterQuontity: 1
       },
 
+      date: new Date().toISOString().substr(0, 10),
       menu: false,
       drawer: false,
+      // modal: false,
+      // menu2: false,
     }
   },
 
@@ -174,7 +171,7 @@ export default {
         category: this.chosedData.category,
         datetime_before: (this.chosedData.date[1]) ? `${this.chosedData.date[1]}T00:00:00Z` : "", 
         datetime_after: (this.chosedData.date[0]) ? `${this.chosedData.date[0]}T00:00:00Z` : "",
-        time_group: this.filterData.timeGroup[0][this.chosedData.timeGroup],
+        time_group: this.chosedData.timeGroup,
         cluster_quontity: this.chosedData.clusterQuontity
       }
       return filterData
@@ -199,16 +196,14 @@ export default {
 
     getData() {
       this.$emit("get-data", this.filterParams)
-      console.log(this.filterParams)
     },
 
     clearForm() {
         this.chosedData.region = ""
         this.chosedData.light = ""
         this.chosedData.category = ""
-        this.chosedData.timeGroup = "Все время"
+        this.chosedData.timeGroup = 0
         this.chosedData.date = ["", ""] 
-        this.chosedData.clusterQuontity = 1
     },
   },
 

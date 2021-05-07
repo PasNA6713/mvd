@@ -27,6 +27,11 @@ const routes = [
         name: 'home', 
       },  
       {
+        path: '/parser',
+        component: () => import('../views/Main/Social.vue'),
+        name: 'parser', 
+      },  
+      {
         path: '/about',
         component: () => import('../views/Main/About.vue'),
         name: 'about', 

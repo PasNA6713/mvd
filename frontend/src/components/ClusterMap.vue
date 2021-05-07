@@ -1,7 +1,6 @@
 <template>
   <v-card class="map-card" 
-  style="border-radius: 15px; height: 904px"
-  elevation="8">
+  style="border-radius: 15px; height: 904px">
     <yandex-map id="map"
       :settings="settings"
       :coords="mapCenter"
@@ -11,20 +10,6 @@
       @map-was-initialized="getMapInstance"
     >
     </yandex-map>
-
-    <!-- <v-row class="two-buttons">
-      <v-btn id="access-button" 
-      @click="changeAccessToMap()"
-      :disabled="pressed"
-      >Поставить точку
-      </v-btn>
-
-      <v-btn id="delete-button" 
-      @click="deleteUserPoint()"
-      :disabled="(pressed && (userPlacemark==null)) || pressed || !userPlacemark"
-      >Удалить точку
-      </v-btn>
-    </v-row> -->
   </v-card>
 </template>
 
