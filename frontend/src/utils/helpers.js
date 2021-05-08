@@ -1,6 +1,6 @@
 export function formatedDateTime(val) {
     let d = new Date(val)
-
+    
     let day = d.getDate()
     if (day < 10) day = '0' + day
 

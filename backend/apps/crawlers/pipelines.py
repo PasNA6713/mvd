@@ -41,7 +41,11 @@ class PreprocessPipeline():
         if item.get('text') is None or item.get('link') is None:
             raise DropItem(f"Empty item!")
         
-        item['text'] = BS(item.get('text'), features="lxml").text
+        # item['text'] = BS(item.get('text'), features="lxml").text
+        if item['text']:
+            for i in BS(item['text']).find_all('img'):
+                item['text'] = item['text'].replace(i, '')
+
 
         if item.get('posted'):
             try:
@@ -75,8 +79,10 @@ class ClassificationPipeline():
     def close_spider(self, spider): pass
 
     def process_item(self, item, spider):
-        if rf_news.predict(tf_news.transform([preproccesor(item['text'])]))==0:
-            suhnosti = ner(item['text'])
+        text = BS(item.get('text'), features="lxml").text
+        # text = item.get('text')
+        if rf_news.predict(tf_news.transform([preproccesor(text)]))==0:
+            suhnosti = ner(text)
             item['loc'] = suhnosti[0]
             item['org'] = suhnosti[1]
             item['per'] = suhnosti[2]
@@ -90,6 +96,11 @@ class PostgresPipeline():
     def close_spider(self, spider): pass
     
     async def process_item(self, item, spider):
-        await sync_to_async(NewsModel.objects.get_or_create)(**item)
-        celery_send_all.delay(item['title'])
+        model, is_created = await sync_to_async(NewsModel.objects.get_or_create)(**item)
+        celery_send_all.delay({
+            "text": item['title'],
+            "source": item['link'],
+            'posted': item['posted'],
+            "id": model.id
+        })
         return item

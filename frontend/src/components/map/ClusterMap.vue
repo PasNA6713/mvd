@@ -1,20 +1,17 @@
 <template>
-  <v-card class="map-card" 
-  style="border-radius: 15px; height: 904px">
     <yandex-map id="map"
       :settings="settings"
       :coords="mapCenter"
       :zoom="10" 
       :use-object-manager="true"
+      :scrollZoom="false"
       :controls="['zoomControl']"
       @map-was-initialized="getMapInstance"
     >
     </yandex-map>
-  </v-card>
 </template>
 
 <style lang="scss" scoped>
-@import '@/styles/common.scss';
 @import '@/styles/components/map.scss';
 </style>
 
@@ -62,7 +59,6 @@ export default {
         cluster[i].cid = cid
       }
 
-      console.log(cluster)
       this.$emit('get-table',cluster)
     },
 
@@ -73,7 +69,6 @@ export default {
       axios.post(`${this.$store.state.backendUrl}/map/some/`,{
         ids: point.properties.points
       }).then(response => {
-        console.log(point.properties.points)
         this.drawTable(response.data, point.id)
       })
     },
@@ -109,19 +104,14 @@ export default {
           }
 
           this.userPoint.coords = e.get('coords')
-          console.log(this.userPoint.coords)
 
           await axios.post(`${this.$store.state.backendUrl}/map/range/?category=Убийство`, {
               lat: this.userPoint.coords[0],
               long: this.userPoint.coords[1]
           }).then(response => {
-              // let points = []
-              console.log(response)
-              // this.userPoint.points = points
               this.userPlacemark = new ymaps.Placemark(this.userPoint.coords)
               this.clusterMap.geoObjects.add(this.userPlacemark)
               this.pressed = false
-              // this.drawTheTable(this.userPoint, this.clasterCounter)
           })
         }
     },

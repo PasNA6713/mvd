@@ -1,20 +1,17 @@
 <template>
-  <v-card class="map-card"
-  style="border-radius: 15px; height: 904px">
     <yandex-map id="map"
       :settings="settings"
       :coords="mapCenter"
       :zoom="10" 
+      :scrollZoom="false"
       :use-object-manager="true"
       :controls="['zoomControl']"
       @map-was-initialized="getMapInstance"
     >
     </yandex-map>
-  </v-card>
 </template>
 
 <style lang="scss" scoped>
-@import '@/styles/common.scss';
 @import '@/styles/components/map.scss';
 </style>
 
@@ -24,13 +21,16 @@ import { formatedDateTime } from '@/utils/helpers.js'
 
 export default {
   name: "Map",
+  
   props: {
     filterParams: Object
   },
+
   components: {
     yandexMap,
     ymapMarker
   },
+
   data() {
     return {
       clusterMap: null,

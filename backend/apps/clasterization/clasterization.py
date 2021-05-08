@@ -155,10 +155,11 @@ def get_patrol_df(patrol_number, df):
 def dynamic_patrol_func(patrol_number, df):
     coord_patrol = get_patrol_df(patrol_number, df)
     coord_json = []
-    for i in range(len(coord_patrol)):
-        coord_json.append({'lat':coord_patrol.iloc[i,0],
-                           'long':coord_patrol.iloc[i,1],
-                           'points':[int(x.replace("'",'')) for x in coord_patrol.iloc[i,2].split(',')] })        
+    if type(coord_patrol) != int:
+        for i in range(len(coord_patrol)):
+            coord_json.append({'lat':coord_patrol.iloc[i,0],
+                            'long':coord_patrol.iloc[i,1],
+                            'points':[int(x.replace("'",'')) for x in coord_patrol.iloc[i,2].split(',')] })        
     return coord_json
 
 

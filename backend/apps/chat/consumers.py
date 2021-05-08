@@ -21,7 +21,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     # отправка
     async def chat_message(self, event):
-        await self.send(text_data=event["message"])
+        await self.send(event["message"])
 
     # принятие
     async def receive(self, text_data):

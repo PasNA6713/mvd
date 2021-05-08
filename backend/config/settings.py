@@ -7,9 +7,6 @@ from corsheaders.defaults import default_headers
 
 if os.getenv("DOCKER") is None:
     load_dotenv(".env")
-import nltk
-nltk.download('punkt')
-nltk.download('stopwords')
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent

@@ -43,11 +43,6 @@
   </div>
 </template>
 
-<style lang="scss" scoped>
-@import '@/styles/common.scss';
-@import '@/styles/views/signIn.scss';
-</style>
-
 <script>
   export default {
     data: () => ({
@@ -66,8 +61,8 @@
               'password': this.password
           }
         ).then(response => {
-              this.$store.commit('setToken', response.data.auth_token) 
-              this.$router.push({ path: 'home' })
+              this.$store.dispatch('setToken', response.data.auth_token) 
+              this.$router.push({ name: 'home' })
           })
         } catch (Error) {
           this.isFalseLogin = true
@@ -76,3 +71,8 @@
     }
   }
 </script>
+
+<style lang="scss" scoped>
+@import '@/styles/common.scss';
+@import '@/styles/views/signIn.scss';
+</style>

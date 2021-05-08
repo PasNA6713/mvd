@@ -5,6 +5,7 @@ from . import views
 
 urlpatterns = [
     path("", views.MapItemListView.as_view()),
+    path("detail/", views.MapDetailListView.as_view()),
     path("<int:pk>/", views.MapItemRetrieveView.as_view()),
     path("some/", views.GetSomeMapItems.as_view()),
     path('range/',views.GetRangeMapItems.as_view()),

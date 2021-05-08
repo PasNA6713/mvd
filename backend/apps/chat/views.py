@@ -18,5 +18,10 @@ def send(request):
     if channel_name is None: return HttpResponse(status=204)
 
     for i in range(100):
-        celery_send_all.delay(i)
+        celery_send_all.delay({
+            "text": "hello",
+            "published": "2012-1-1",
+            "id": i,
+            "source": "some_source"
+        })
     return HttpResponse(status=200)

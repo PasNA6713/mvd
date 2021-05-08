@@ -7,7 +7,6 @@ from django.db.models import Q, Count, F, DateField
 
 from .models import MapItem
 
-
 def get_items_by_ids(ids: list):
     q = Q()
     for i in ids:

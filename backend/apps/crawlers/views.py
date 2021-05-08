@@ -1,6 +1,8 @@
 from multiprocessing import Process
 
-from rest_framework import status, generics
+from django_filters.rest_framework import DjangoFilterBackend
+
+from rest_framework import status, viewsets
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -11,6 +13,7 @@ from scrapy.utils.project import get_project_settings
 from .serializers import RunnerSerializer, NewsSerializer
 from .spiders.core.services import extract_domain
 from .models import NewsModel
+from .filters import NewsFilter
 from .tasks import insta_parser
 
 
@@ -47,6 +50,8 @@ class StartCrawlerView(APIView):
         return Response(status=status.HTTP_200_OK)
 
 
-class NewsList(generics.ListAPIView):
-    queryset = NewsModel.objects.all()
+class NewsList(viewsets.ModelViewSet):
+    queryset = NewsModel.objects.all().order_by('-posted')
     serializer_class = NewsSerializer
+    filter_backends = (DjangoFilterBackend,)
+    filterset_class = NewsFilter

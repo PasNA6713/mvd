@@ -1,5 +1,5 @@
 <template>
-  <v-card class="data-table"
+  <v-card class="data-table" elevation='0'
   style="border-radius: 15px;">
     <v-data-table
     :headers="tableHeaders"

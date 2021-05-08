@@ -13,8 +13,6 @@ from .filters import (
     get_months_plot, get_column_sum_plot,
     get_items_by_ids, filter_range
 )
-from . import params
-from .services import *
 
 
 class MapItemCreateView(generics.CreateAPIView):
@@ -29,6 +27,13 @@ class MapItemDestroyView(generics.DestroyAPIView):
 class MapItemRetrieveView(generics.RetrieveAPIView):
     queryset = MapItem.objects.all()
     serializer_class = MapItemDetailSerializer
+
+
+class MapDetailListView(generics.ListAPIView):
+    queryset = MapItem.objects.all()
+    serializer_class = MapItemDetailSerializer
+    filter_backends = (DjangoFilterBackend,)
+    filterset_class = MapItemFilter
 
 
 class MapItemListView(generics.ListAPIView):
@@ -83,7 +88,9 @@ class GetSomeMapItems(generics.CreateAPIView):
 
 class GetFilterParams(APIView):
     def get(self, request, fieldname):
-        return Response(params.FIELDS_SET.get(fieldname))
+        if fieldname == 'fields': data = {i.name for i in MapItem._meta.fields}
+        else: data = MapItem.objects.all().values_list(fieldname, flat=True).distinct()
+        return Response(data)
 
 
 class GetRangeMapItems(generics.ListCreateAPIView):

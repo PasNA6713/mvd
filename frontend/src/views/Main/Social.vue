@@ -1,35 +1,28 @@
 <template>
   <div>
-     <SMdialog />
+    <SMdialog />
   </div>
 </template>
 
-<style lang="scss" scoped> 
-@import '@/styles/common.scss';
-@import '@/styles/views/stat.scss';
-</style>
 
 <script>
-import Navbar from "@/components/Navbar.vue"
-import Header from "@/components/Header.vue"
-import SMdialog from "@/components/SMdialog.vue"
-
+import SMdialog from "@/components/parser/Parser.vue";
 
 export default {
-  name: 'Social',
+  name: "Social",
   components: {
-        Navbar,
-        Header,
-       SMdialog,
-    },
+    SMdialog,
+  },
   data() {
-    return {
-      
-    }
+    return {};
   },
 
-  methods: {
-
-  },
-}
+  methods: {},
+};
 </script>
+
+
+<style lang="scss" scoped>
+@import "@/styles/common.scss";
+@import "@/styles/views/stat.scss";
+</style>

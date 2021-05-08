@@ -8,15 +8,21 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     token: null,
-    backendUrl: 'https://mozh-team.net.ru'
+    backendUrl: 'http://127.0.0.1:8000/'
   },
+
   mutations: {
     setToken(state, token) {
       state.token = token
     }
   },
+
   actions: {
+    setToken(context, value) {
+      context.commit('setToken', value);
+    },
   },
+
   modules: {
   },
 

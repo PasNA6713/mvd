@@ -20,21 +20,25 @@ const routes = [
         path: '/stat',
         component: () => import('../views/Main/Stat.vue'),
         name: 'stat',
+        meta: { theme: '#55884F' }
       },
       {
         path: '/home',
         component: () => import('../views/Main/Home.vue'),
-        name: 'home', 
+        name: 'home',
+        meta: { theme: '#544F88' }
       },  
       {
         path: '/parser',
         component: () => import('../views/Main/Social.vue'),
-        name: 'parser', 
+        name: 'parser',
+        meta: { theme: '#37889A' }
       },  
       {
-        path: '/about',
-        component: () => import('../views/Main/About.vue'),
-        name: 'about', 
+        path: '/docs',
+        component: () => import('../views/Main/Docs.vue'),
+        name: 'docs',
+        meta: { theme: '#374D9A' }
       }  
     ]
   },
