@@ -5,12 +5,13 @@
       :tableHeaders="tableHeaders"
       :tableItems="tableItems"
       v-on:get-chart="getChart"
+      v-on:download="download"
     />
     <v-card
       class="chart-card"
       style="border-radius: 15px; max-height: 500px; margin-bottom: 60px"
       v-if="loaded"
-      elevation='0'
+      elevation="0"
     >
       <Chart :chart-data="chartData" />
     </v-card>
@@ -70,11 +71,27 @@ export default {
   },
 
   methods: {
+    download(format) {
+      let url = new URL(`${this.$store.state.backendUrl}/file/get/${format}/`);
+      if (this.filterParams) {
+        Object.keys(this.filterParams).forEach((key) => {
+          if (this.filterParams[key]) {
+            try {
+              url.searchParams.set(key, this.filterParams[key].toISOString());
+            } catch {
+              url.searchParams.set(key, this.filterParams[key]);
+            }
+          }
+        });
+      }
+      window.open(url.href);
+    },
+
     getData(filterParams) {
       this.filterParams = filterParams;
       axios
         .get(`${this.$store.state.backendUrl}/map/detail/`, {
-          params: filterParams,
+          params: this.filterParams,
         })
         .then((r) => {
           this.tableItems = r.data;

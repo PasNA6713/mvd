@@ -28,6 +28,7 @@
           :tableHeaders="tableHeaders"
           :tableItems="clusterData"
           v-if="loaded"
+          v-on:download="download"
         />
       </v-col>
     </v-row>
@@ -55,6 +56,7 @@ export default {
     DataTable,
     Chart,
   },
+
   data() {
     return {
       loaded: false,
@@ -79,6 +81,22 @@ export default {
   },
 
   methods: {
+    download(format) {
+      let url = new URL(`${this.$store.state.backendUrl}/file/cluster/${this.filterData.cluster_quontity}/${format}/`);
+      if (this.filterData) {
+        Object.keys(this.filterData).forEach((key) => {
+          if (this.filterData[key]) {
+            try {
+              url.searchParams.set(key, this.filterData[key].toISOString());
+            } catch {
+              url.searchParams.set(key, this.filterData[key]);
+            }
+          }
+        });
+      }
+      window.open(url.href);
+    },
+
     getData(val) {
       this.filterData = val;
 
