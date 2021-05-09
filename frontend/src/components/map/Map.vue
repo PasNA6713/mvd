@@ -3,8 +3,8 @@
       :settings="settings"
       :coords="mapCenter"
       :zoom="10" 
-      :scrollZoom="false"
       :use-object-manager="true"
+      :scrollZoom="false"
       :controls="['zoomControl']"
       @map-was-initialized="getMapInstance"
     >
@@ -12,6 +12,7 @@
 </template>
 
 <style lang="scss" scoped>
+@import '@/styles/common.scss';
 @import '@/styles/components/map.scss';
 </style>
 
@@ -21,16 +22,13 @@ import { formatedDateTime } from '@/utils/helpers.js'
 
 export default {
   name: "Map",
-  
   props: {
     filterParams: Object
   },
-
   components: {
     yandexMap,
     ymapMarker
   },
-
   data() {
     return {
       clusterMap: null,
@@ -70,15 +68,19 @@ export default {
               balloonContentBody: clusterData[i].category,
               balloonContentFooter: formatedDateTime(clusterData[i].datetime), 
             }  
-          } 
+          }
+          this.objectManager.clusters.state.set('activeObject', cluster)
+          this.objectManager.clusters.state.set('activeObject', objects[0])
         })
       }
       else {
         let point = this.objectManager.objects.getById(target)
         axios.get(`${this.$store.state.backendUrl}/map/${target}/`
         ).then(response => {
-          point.properties.hintContent = response.data.category + " " + formatedDateTime(response.data.datetime)
-          point.properties.balloonContent = response.data.category + " " + formatedDateTime(response.data.datetime)
+          let coords = point.geometry.coordinates
+          this.clusterMap.balloon.open(coords, {
+            contentBody: response.data.category + " " + formatedDateTime(response.data.datetime)
+          })
         })
       }
     },
