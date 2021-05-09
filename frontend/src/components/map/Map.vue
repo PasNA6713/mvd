@@ -1,16 +1,14 @@
 <template>
-  <v-card class="map-card"
-  style="border-radius: 15px; height: 904px">
     <yandex-map id="map"
       :settings="settings"
       :coords="mapCenter"
       :zoom="10" 
       :use-object-manager="true"
+      :scrollZoom="false"
       :controls="['zoomControl']"
       @map-was-initialized="getMapInstance"
     >
     </yandex-map>
-  </v-card>
 </template>
 
 <style lang="scss" scoped>
