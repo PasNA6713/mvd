@@ -64,21 +64,21 @@ export default {
   data() {
     return {
       filter: {
-        Город: "parent_region",
-        Регион: "region",
+        "Город": "parent_region",
+        "Регион": "region",
         "Способ совершения преступления": "category",
-        Освещение: "light",
-        Адрес: "address",
+        "Освещение": "light",
+        "Адрес": "address",
         "Наименование органа": "organization",
         "Вид уголовного преследования": "criminal_type",
         "Кем выявлено": "employee",
         "Выявлено по оперативным данным": "is_operative",
         "Квалификация преступления": "crime_qualification",
         "пункт Квалификация преступления по УК РФ": "yk_qualification",
-        Тяжесть: "severity",
+        "Тяжесть": "severity",
         "Приготовление/покушение": "is_attempt",
-        Ущерб: "damage",
-        Направленность: "crime_direction",
+        "Ущерб": "damage",
+        "Направленность": "crime_direction",
         "Наименование наркотика": "drug_name",
       },
 
@@ -104,7 +104,7 @@ export default {
 
   methods: {
     send() {
-      this.chosedData.time_group = this.timeGroups[this.chosedData.time_group]
+      this.chosedData.time_group = this.timeGroups[this.chosedData.time_group];
       this.$emit("get-data", this.chosedData);
     },
 
@@ -123,14 +123,15 @@ export default {
     },
 
     clearForm() {
-      Object.keys(this.chosedData).forEach((field) => {
-        this.chosedData[field] = null;
-      });
+      this.chosedData = {
+        datetime_before: new Date(),
+        time_group: "Все время"
+      }
     },
   },
 
   async created() {
-    this.getData();
+    await this.getData();
   },
 };
 </script>

@@ -44,6 +44,14 @@ export default {
 
       filterParams: {},
 
+      timeGroups: {
+        "Все время": null,
+        "2.00 - 11.00": 0,
+        "11.00 - 16.00": 1,
+        "16.00 - 21.00": 2,
+        "21.00 - 2.00": 3,
+      },
+
       tableHeaders: [
         { text: "Время", value: "datetime" },
         { text: "Город", value: "parent_region" },
@@ -89,6 +97,7 @@ export default {
 
     getData(filterParams) {
       this.filterParams = filterParams;
+      console.log(filterParams)
       axios
         .get(`${this.$store.state.backendUrl}/map/detail/`, {
           params: filterParams
@@ -99,6 +108,8 @@ export default {
     },
 
     async getChart(column) {
+      this.filterParams.time_group = this.timeGroups[this.filterParams.time_group];
+
       if (column != undefined) {
         this.loaded = false;
         await axios

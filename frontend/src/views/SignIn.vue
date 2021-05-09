@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-row class="sign-in">
-      <v-col cols="6" class="sign-in__column">
+      <v-col cols="12" class="sign-in__column">
         <v-card class="sign-in-form">
           <p class="sign-in-form__text">Авторизация</p>
           <v-text-field
@@ -36,9 +36,6 @@
           >Некорректно введены данные!</v-alert>
         </v-card>
       </v-col> 
-
-      <v-col cols="6" class="sign-in-form__image">
-      </v-col>
     </v-row>
   </div>
 </template>
