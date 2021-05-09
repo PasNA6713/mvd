@@ -73,6 +73,10 @@ export default {
         ids: point.properties.points
       }).then(response => {
         this.drawTable(response.data, point.id)
+
+        let scrollElement = document.getElementById('map');
+        scrollElement.scrollBottom = scrollElement.scrollHeight;
+        this.$vuetify.goTo(scrollElement);
       })
     },
 
