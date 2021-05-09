@@ -1,11 +1,8 @@
-
 from django.db import models
 
 
 class ImgModel(models.Model):
     file = models.FileField(upload_to='uploads/images/')
-    uploaded = models.DateTimeField(auto_now=True)
-
 
 class FormatedImgModel(models.Model):
     file = models.FileField(upload_to='uploads/formated-img/')
@@ -14,7 +11,6 @@ class FormatedImgModel(models.Model):
         on_delete=models.CASCADE,
         primary_key=True,
     )
-
 
 from django.contrib import admin
 admin.site.register(ImgModel)

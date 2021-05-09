@@ -2,7 +2,9 @@
   <div>
     <Header />
     <Navbar />
-    <router-view style="margin-bottom: 60px"/>
+    <keep-alive>
+      <router-view style="margin-bottom: 60px" />
+    </keep-alive>
     <Footer />
   </div>
 </template>

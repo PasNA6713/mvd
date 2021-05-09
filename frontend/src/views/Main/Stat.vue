@@ -91,7 +91,7 @@ export default {
       this.filterParams = filterParams;
       axios
         .get(`${this.$store.state.backendUrl}/map/detail/`, {
-          params: this.filterParams,
+          params: filterParams
         })
         .then((r) => {
           this.tableItems = r.data;

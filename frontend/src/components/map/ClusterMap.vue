@@ -21,13 +21,16 @@ import { formatedDateTime } from '@/utils/helpers.js'
 
 export default {
   name: "ClusterMap",
+  
   props: {
     filterParams: Object
   },
+
   components: {
     yandexMap,
     ymapMarker
   },
+
   data() {
     return {
       clusterMap: null,
