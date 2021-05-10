@@ -8,7 +8,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     token: null,
-    backendUrl: 'http://127.0.0.1:8000/'
+    backendUrl: 'https://mozh-team.net.ru'
   },
 
   mutations: {
