@@ -52,7 +52,7 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  if (to.name !== 'signIn' && store.state.token == null) next({ name: "signIn" })
+  if (to.name == 'signIn') next({ name: "home" })
   else next()
 })
 
